@@ -1,0 +1,111 @@
+# Ejercicio 1 (Intervalos de confianza pra la media en una población normal)
+
+#calcular el intervalo de confianza del 95% utilizando la aproximación de la distribución normal
+#para la longitud media del sépalo de la especie Iris setosa.
+
+# Paso 1: Cargamos los datos
+data(iris)
+
+# Paso 2: Filtramos los datos para obtener solo las flores Iris setosa
+setosa <- iris[iris$Species == 'setosa',]
+
+# Paso 3: Calculamos la media y la desviación estándar de la longitud del sépalo
+media_longitud_sepalo <- mean(setosa$Sepal.Length)
+desviacion_longitud_sepalo <- sd(setosa$Sepal.Length)
+
+# Paso 4: Determinamos el tamaño de la muestra
+n <- length(setosa$Sepal.Length)
+
+# Paso 5: Calculamos el error estándar
+error_estandar <- desviacion_longitud_sepalo / sqrt(n)
+
+# Paso 6: Calculamos el intervalo de confianza del 95% utilizando la aproximación de la distribución normal
+# Para un 95% de confianza, el valor de Z es aproximadamente 1.96
+z <- 1.96
+
+intervalo_inferior <- media_longitud_sepalo - z*error_estandar
+intervalo_superior <- media_longitud_sepalo + z*error_estandar
+
+# Imprimimos los resultados
+print(paste0("Intervalo de confianza del 95% para la longitud media del sépalo de Iris setosa: [", intervalo_inferior, ", ", intervalo_superior, "]"))
+
+# Ejercicio 2
+# A partir de los datos del ejercicio 1, calcular el intervalo de confianza del 95% utilizando la aproximación de la distribución normal
+#para el ancho medio del sépalo de la especie Iris setosa.
+
+#ejercicio 3
+#calcular el intervalo de confianza del 95% para la altura de una poblacion de:
+
+library(dslabs)
+data(heights)
+
+#Ejercicio 4 (Intervalo de confianza para la proporción)
+
+# Carga el paquete necesario
+install.packages('binom')
+library(binom)
+
+# Carga el conjunto de datos iris
+data(iris)
+
+# Crea una nueva columna 'is_setosa' que sea 1 si la especie es 'setosa' y 0 en caso contrario
+iris$is_setosa <- as.integer(iris$Species == 'setosa')
+
+# Calcula el número total de observaciones
+n <- nrow(iris)
+
+# Calcula el número de éxitos (observaciones donde la especie es 'setosa')
+x <- sum(iris$is_setosa)
+
+# Calcula el intervalo de confianza
+conf_int <- binom.confint(x, n, methods = "wilson", conf.level = 0.95)
+
+# Imprime el intervalo de confianza
+print(conf_int)
+
+#ejercicio 5
+
+#obtener un intervalo de confianza al 95% para la proporción de alumnos en la población. 
+#Del mismo modo, calcular un intervalo de confianza al 90% para la proporción de alumnas.
+#descargar datos del link: https://unatofacl-my.sharepoint.com/:x:/g/personal/pablo_aguilar_uantof_cl/EW2X5xuZ5BNFoLHulrDoRG0Bp7C7wzJHcboYL1oN968dYg?e=liA7ip
+
+#Alumnos
+table(datos$Sexo)
+prop.test(43,75)
+
+#Alumnas
+prop.test(32,75, conf.level = 0.90)
+
+#Ejercicio 6 (Intervalo de confianza para la diferencia de medias en dos poblaciones normales independientes)
+
+Flexiones.chicos<- datos$Flexiones[datos$Sexo == “H”]
+Flexiones.chicas<- datos$Flexiones[datos$Sexo == “M”]
+
+Flexiones.chicas
+Flexiones.chicos
+
+var.test(Flexiones.chicos, Flexiones.chicas)
+
+Flexiones.chicos<- datos$Flexiones[datos$Sexo == “H”]
+Flexiones.chicas<- datos$Flexiones[datos$Sexo == “M”]
+t.test(Flexiones.chicos, Flexiones.chicas, var.equal = TRUE)
+
+#Ejercicio 7 (Intervalo de confianza para la diferencia de dos proporciones)
+#calcular un intervalo de confianza al 92% para la diferencia entre la proporción de alumnos y de alumnas 
+#que practican deporte. ¿Puede considerarse que ambas proporciones son iguales?
+
+table(datos$Sexo, datos$Deporte)
+
+#vector_Deporte: Total de chicos y chicas que practican deporte
+#vector_Sexo: Total de chicos y chicas en la muestra.
+
+vector_Deporte<- c(11, 19)
+vector_Deporte
+
+vector_Sexo<- c(43, 32)
+vector_Sexo
+
+#Es muy importante que los valores se introduzcan en el mismo orden en los dos vectores. 
+#A continuación podemos utilizar la función prop.test con estos dos vectores como argumentos.
+
+prop.test(vector_Deporte, vector_Sexo, conf.level = 0.92)
